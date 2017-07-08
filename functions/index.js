@@ -1,43 +1,35 @@
-'use strict'; 
+'use strict';
 
 process.env.DEBUG = 'actions-on-google:*';
 
 const Assistant = require('actions-on-google').ApiAiApp;
 const Gdax = require('gdax');
-const GdaxClient = new Gdax.PublicClient(['LTC-USD']);
 const functions = require('firebase-functions');
 
-exports.getLTCPrice = functions.https.onRequest((req, res) => {
-    const app = new Assistant({request: req, response: res});
-    console.log("Request is: ", req);
-    console.log("App is: ", app);
+const getPrice = require('./getPrice');
 
-    function mainIntent(app) {
-        console.log("Main intent called");
-        let inputPrompt = app.buildInputPrompt("Welcome. Say something");
-        app.ask(inputPrompt);
+exports.handler = functions.https.onRequest((req, res) => {
+    const app = new Assistant({ request: req, response: res });
+
+    const currencyIds = {
+      bitcoin: 'BTC-USD',
+      litecoin: 'LTC-USD',
+      ethereum: 'ETH-USD',
     }
 
-    function getPrice(app) {
-        console.log("Get price called");
-        GdaxClient.getProductTicker((err, req, data) => {
-            if(err) {
-                app.tell("There was an error!");
-            }
+    const currency = app.getArgument('currency-name')
 
-            console.log('err', err);
-            console.log('data', data);
-            if(data && data.price) {
-                app.tell("The current price of Litecoin is " + data.price);
-            } else {
-                app.tell("Error retrieving Litecoin price");
-            }
-        })
+    const GdaxClient = new Gdax.PublicClient(currencyIds[currency]);
+
+    function mainIntent(app) {
+        let inputPrompt = app.buildInputPrompt("Welcome. Say something");
+        app.ask(inputPrompt);
     }
 
     // Map actions
     let actionMap = new Map();
     actionMap.set('main', mainIntent);
-    actionMap.set('get.price', getPrice);
+    actionMap.set(getPrice.actionName, getPrice.fulfillment(GdaxClient, currency));
+
     app.handleRequest(actionMap);
 });
