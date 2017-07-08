@@ -1,28 +1,36 @@
 'use strict'; 
 
-const ActionsSdkApp = require('actions-on-google').ActionsSdkApp;
+process.env.DEBUG = 'actions-on-google:*';
+
+const Assistant = require('actions-on-google').ApiAiApp;
 const Gdax = require('gdax');
 const GdaxClient = new Gdax.PublicClient(['LTC-USD']);
 const functions = require('firebase-functions');
 
 exports.getLTCPrice = functions.https.onRequest((req, res) => {
-    const app = new ActionsSdkApp({request: req, response: res});
+    const app = new Assistant({request: req, response: res});
     console.log("Request is: ", req);
     console.log("App is: ", app);
 
     function mainIntent(app) {
         console.log("Main intent called");
-        let inputPrompt = app.buildInputPrompt(false, "Welcome. Say something");
+        let inputPrompt = app.buildInputPrompt("Welcome. Say something");
         app.ask(inputPrompt);
     }
 
     function getPrice(app) {
-        conosle.log("Get price called");
-        return GdaxClient.getProductTicker((err, tick) => {
-            if(tick && tick.price) {
-                app.tell(false, "The current price of Litecoin is " + tick.price);
+        console.log("Get price called");
+        GdaxClient.getProductTicker((err, req, data) => {
+            if(err) {
+                app.tell("There was an error!");
+            }
+
+            console.log('err', err);
+            console.log('data', data);
+            if(data && data.price) {
+                app.tell("The current price of Litecoin is " + data.price);
             } else {
-                app.tell(false, "Error retrieving Litecoin price");
+                app.tell("Error retrieving Litecoin price");
             }
         })
     }
