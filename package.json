@@ -1,0 +1,23 @@
+{
+  "name": "gdax-voice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theevenprime2/gdax-voice.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/theevenprime2/gdax-voice/issues"
+  },
+  "homepage": "https://github.com/theevenprime2/gdax-voice#readme",
+  "dependencies": {
+    "actions-on-google": "^1.1.1",
+    "gdax": "^0.4.2"
+  }
+}
