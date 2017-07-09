@@ -37,5 +37,9 @@
   },
   "Message": {
     "dataSource": null
+  },
+  "notificationrequest": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }

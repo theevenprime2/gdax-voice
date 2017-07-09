@@ -1,0 +1,30 @@
+{
+  "name": "notificationrequest",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "phonenumber": {
+      "type": "number",
+      "required": true
+    },
+    "threshold": {
+      "type": "number",
+      "required": true
+    },
+    "cointype": {
+      "type": "string",
+      "required": true
+    },
+    "thresholddirection": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
