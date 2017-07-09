@@ -4,7 +4,6 @@ module.exports = {
 
     fulfillment: (GdaxClient, currency) => (
         (app) => {
-            console.log(GdaxClient)
             GdaxClient.getProductTicker((err, req, data) => {
                 if (err) {
                     app.tell("There was an error!");

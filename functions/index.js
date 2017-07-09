@@ -7,6 +7,7 @@ const Gdax = require('gdax');
 const functions = require('firebase-functions');
 
 const getPrice = require('./getPrice');
+const get24HrStats = require('./get24HrStats');
 
 exports.handler = functions.https.onRequest((req, res) => {
     const app = new Assistant({ request: req, response: res });
@@ -30,6 +31,7 @@ exports.handler = functions.https.onRequest((req, res) => {
     let actionMap = new Map();
     actionMap.set('main', mainIntent);
     actionMap.set(getPrice.actionName, getPrice.fulfillment(GdaxClient, currency));
+    actionMap.set(get24HrStats.actionName, get24HrStats.fulfillment(GdaxClient, currency));
 
     app.handleRequest(actionMap);
 });
